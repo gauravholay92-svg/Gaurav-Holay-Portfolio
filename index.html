@@ -382,18 +382,43 @@ section { padding: 3rem 2.5rem; }
   font-weight: 300;
 }
 .case-toggle {
-  background: none; border: none;
-  color: #64748B;
-  font-size: 2rem;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: rgba(78,222,163,0.08);
+  border: 1.5px solid #4edea3;
+  color: #4edea3;
   cursor: pointer;
-  transition: color 0.2s, transform 0.3s;
-  padding: 0.5rem 0.75rem;
-  font-weight: 300;
-  line-height: 1;
-  border-radius: 0.25rem;
+  padding: 0.55rem 0.6rem 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  animation: ctPulse 2.4s ease-in-out infinite;
 }
-.case-toggle:hover { color: #4edea3; background: rgba(78,222,163,0.08); }
-.case-toggle.open { transform: rotate(45deg); color: #4edea3; }
+.case-toggle .ct-label {
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.case-toggle .ct-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: #4edea3; color: #003824;
+  font-size: 1.35rem; font-weight: 700; line-height: 1;
+  transition: transform 0.3s;
+}
+.case-header:hover .case-toggle,
+.case-toggle:hover { background: #4edea3; color: #003824; box-shadow: 0 0 18px rgba(78,222,163,0.35); }
+.case-header:hover .case-toggle .ct-icon,
+.case-toggle:hover .ct-icon { background: #003824; color: #4edea3; }
+.case-toggle.open { animation: none; }
+.case-toggle.open .ct-icon { transform: rotate(45deg); }
+@keyframes ctPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(78,222,163,0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(78,222,163,0.15); }
+}
+@media (max-width: 640px) {
+  .case-toggle { padding: 0.35rem; }
+  .case-toggle .ct-label { display: none; }
+}
 
 /* ── Reel Grid ─────────────────────────── */
 .reel-grid {
@@ -908,7 +933,7 @@ footer {
                 <div class="case-num-label">Monthly run rate</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -977,7 +1002,7 @@ footer {
                 <div class="case-num-label">In 2 days</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1039,7 +1064,7 @@ footer {
                 <div class="case-num-label">ROAS on Meta Ads</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1105,7 +1130,7 @@ footer {
                 <div class="case-num-label">On &#8377;15K spend</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1153,7 +1178,7 @@ footer {
                 <div class="case-num-label">Revenue growth</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1195,7 +1220,7 @@ footer {
                 <div class="case-num-label">Organic views</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1237,7 +1262,7 @@ footer {
                 <div class="case-num-label">Accounts reached growth</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1297,7 +1322,7 @@ footer {
                 <div class="case-num-label">Net new followers, 4 months</div>
               </div>
             </div>
-            <button class="case-toggle" aria-label="Expand">+</button>
+            <button class="case-toggle" aria-label="View work"><span class="ct-label">View work</span><span class="ct-icon">+</span></button>
           </div>
         </div>
         <div class="case-body">
@@ -1484,9 +1509,11 @@ function toggleCase(header) {
   if (isOpen) {
     body.classList.remove('open');
     btn.classList.remove('open');
+    var lbl = btn.querySelector('.ct-label'); if (lbl) lbl.textContent = 'View work';
   } else {
     body.classList.add('open');
     btn.classList.add('open');
+    var lbl2 = btn.querySelector('.ct-label'); if (lbl2) lbl2.textContent = 'Close';
   }
 }
 </script>
